@@ -6,7 +6,7 @@ COPY . .
 
 RUN rm -rf node_modules
 
-RUN npm install && prisma migrate dev 
+RUN npm install && npm install -g prisma && prisma migrate dev 
 
 CMD ["sh", "-c", "prisma migrate dev && npm run start"]
 

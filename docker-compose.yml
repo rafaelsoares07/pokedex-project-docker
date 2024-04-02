@@ -17,7 +17,7 @@ services:
       - pokedex-network
 
   node-app:
-    build: .
+    build: ./backend
     container_name: "node-app"
     restart: always
     volumes:
@@ -30,7 +30,17 @@ services:
       - db-postgres-pokedex
     networks:
       - pokedex-network
-
+  
+  # react-app:
+  #   build: ./frontend
+  #   container_name: react_app
+  #   restart: always
+  #   ports:
+  #     - "5173:5173"
+  #   depends_on:
+  #     - node-app
+  #   networks:
+  #     - pokedex-network
 networks:
   pokedex-network:
     driver: bridge
