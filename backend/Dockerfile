@@ -1,13 +1,17 @@
 FROM node:latest 
 
-WORKDIR /api
+WORKDIR /usr/src/back
 
-COPY . .
+COPY package*.json ./
 
-RUN rm -rf node_modules
+RUN npm install
 
-RUN npm install && npm install -g prisma && prisma migrate dev 
+COPY . . 
 
-CMD ["sh", "-c", "prisma migrate dev && npm run start"]
+EXPOSE 5000
+
+RUN npx prisma generate
+
+CMD ["npm", "start"]
 
 EXPOSE 3000

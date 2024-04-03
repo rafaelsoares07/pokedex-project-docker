@@ -1,4 +1,4 @@
-import { signUpUserService } from "../services/user.services.js";
+import { signUpUserService, signInUserService } from "../services/user.services.js";
 import { userSchema } from "../validations/user.validation.js";
 import bcrypt from "bcrypt"
 
@@ -10,6 +10,7 @@ export const signup = async (req, res) => {
         const hashPassword = await bcrypt.hash(req.body.password, 8);
 
         req.body.password = hashPassword;
+        console.log("chegou aqui")
 
         const user = await signUpUserService(req.body);
 
@@ -23,11 +24,15 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) =>{
+    console.log("chegou aqui funcao de pegar usuarios")
     try {
-        const users = await getAllUsers();
-        console.lof(users)
+        const users = await signInUserService();
+        console.log("-------")
+        console.log(users)
+        console.log("-------")
         res.send(users)
     } catch (error) {
+        console.log("caiu no cacth")
         res.status(400).send(error)
     }
 }

@@ -1,17 +1,17 @@
-version: '3'
+version: '3.3'
 
 services:
-  db-postgres-pokedex:
+  database:
     image: postgres:alpine
     ports:
-      - "2345:5432"
-    container_name: "db-postgres-pokedex"
+      - "5432:5432"
+    container_name: "database"
     restart: always
     volumes:
-      - ./volume-docker:/var/lib/postgresql/data
+      - ./volume-docker-compose:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
       POSTGRES_DB: pokedex-db
     networks:
       - pokedex-network
@@ -21,26 +21,70 @@ services:
     container_name: "node-app"
     restart: always
     volumes:
-      - .:/api
+      - ./backend:/api
     environment:
-      DATABASE_URL: postgres://admin:admin@db-postgres-pokedex:5432/pokedex-db
+      - DATABASE_URL=postgresql://docker:docker@database:5432/pokedex-db?schema=public
     ports:
       - "3000:3000"
     depends_on:
-      - db-postgres-pokedex
+      - database
     networks:
       - pokedex-network
-  
-  # react-app:
-  #   build: ./frontend
-  #   container_name: react_app
-  #   restart: always
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     - node-app
-  #   networks:
-  #     - pokedex-network
+
+  react-app:
+    build: ./frontend
+    container_name: react-app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/usr/src/client
+    depends_on:
+      - node-app
+    networks:
+      - pokedex-network
+
 networks:
   pokedex-network:
     driver: bridge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#   # react-app:
+#   #   build: ./frontend
+#   #   container_name: react_app
+#   #   restart: always
+#   #   ports:
+#   #     - "5173:5173"
+#   #   depends_on:
+#   #     - node-app
+#   #   networks:
+#   #     - pokedex-network
