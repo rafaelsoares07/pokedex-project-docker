@@ -37,7 +37,7 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/usr/src/client
+      - ./frontend:/usr/src/front
     depends_on:
       - node-app
     networks:
