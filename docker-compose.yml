@@ -38,6 +38,7 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/usr/src/front
+      - /usr/src/front/node_modules
     depends_on:
       - node-app
     networks:
