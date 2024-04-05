@@ -13,6 +13,6 @@ app.use(express.json())
 app.use(userRouter)
 
 app.listen(3000, ()=>{
-    console.log("Servidor Iniciou")
+    console.log("Servidor Iniciou tempo real")
 })
 

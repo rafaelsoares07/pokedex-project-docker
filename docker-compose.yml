@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: pokedex-db
+      POSTGRES_DB: pokedex
     networks:
       - pokedex-network
 
@@ -21,7 +21,7 @@ services:
     container_name: "node-app"
     restart: always
     volumes:
-      - ./backend:/api
+      - ./backend:/usr/src/back
     environment:
       - DATABASE_URL=postgresql://docker:docker@database:5432/pokedex-db?schema=public
     ports:

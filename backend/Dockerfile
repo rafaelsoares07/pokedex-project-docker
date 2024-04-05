@@ -6,12 +6,12 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . . 
-
-EXPOSE 5000
+COPY prisma ./prisma
 
 RUN npx prisma generate
 
-CMD ["npm", "start"]
+COPY . .
+
+CMD ["npm","run","dev"]
 
 EXPOSE 3000
