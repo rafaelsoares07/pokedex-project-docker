@@ -11,7 +11,7 @@ export const SignUpForm = () => {
     e.preventDefault();
     console.log(form)
     try {
-      const response = await axios.post("http://localhost:3000/user", form)
+      const response = await axios.post("http://localhost:3000/signup", form)
       console.log(response)
     } catch (error) {
       console.log(error)

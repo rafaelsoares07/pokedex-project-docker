@@ -24,15 +24,11 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) =>{
-    console.log("chegou aqui funcao de pegar usuarios")
+    
     try {
-        const users = await signInUserService();
-        console.log("-------")
-        console.log(users)
-        console.log("-------")
-        res.send(users)
+        const autheticatedUser = await signInUserService(req.body);
+        res.status(201).send(autheticatedUser)
     } catch (error) {
-        console.log("caiu no cacth")
         res.status(400).send(error)
     }
 }

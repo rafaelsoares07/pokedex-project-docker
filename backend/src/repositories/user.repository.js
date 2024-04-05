@@ -15,15 +15,29 @@ export const createUser = async (data) => {
         });
         return user;
     } catch (error) {
-        // Aqui você pode lidar com o erro da forma desejada
         console.error("Erro ao criar usuário:", error);
-        throw error; // Você também pode optar por relançar o erro para que ele seja tratado em um nível superior
+        throw error;
     }
 }
 
-export const loginUser = async () => {
-    const users = await prisma.user.findMany({});
-    console.log("chegou no loginUser")
-    console.log(users)
-    return users
+export const getUserByEmail = async (userEmail) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                email:userEmail
+            },
+            select:{
+                id: true,
+                name: true,
+                lastname:true,
+                email: true,
+                password: false,
+                trainername:true
+            }
+        })
+        return user
+    } catch (error) {
+        throw error
+    }
+
 }
