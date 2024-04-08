@@ -8,7 +8,7 @@ services:
     container_name: "database"
     restart: always
     volumes:
-      - ./volume-docker-compose:/var/lib/postgresql/data
+      - ./volume-docker:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
