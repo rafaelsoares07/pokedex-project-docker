@@ -10,7 +10,6 @@ export const signup = async (req, res) => {
         const hashPassword = await bcrypt.hash(req.body.password, 8);
 
         req.body.password = hashPassword;
-        console.log("chegou aqui")
 
         const user = await signUpUserService(req.body);
 
@@ -18,17 +17,27 @@ export const signup = async (req, res) => {
 
     } catch (error) {
 
-        res.status(400).send(error);
+        if (error.code) {
+            res.status(error.code).json({ message: error.message });
+        } else {
+            res.status(500).send(error);
+        }
 
     }
 };
 
-export const signin = async (req, res) =>{
-    
+export const signin = async (req, res) => {
+
     try {
-        const autheticatedUser = await signInUserService(req.body);
-        res.status(201).send(autheticatedUser)
+        const data = req.body;
+        const authUser = await signInUserService(data);
+        res.status(200).json(authUser);
     } catch (error) {
-        res.status(400).send(error)
+        console.log(error)
+        if (error.code) {
+            res.status(error.code).json({ message: error.message });
+        } else {
+            res.status(500).send(error);
+        }
     }
 }

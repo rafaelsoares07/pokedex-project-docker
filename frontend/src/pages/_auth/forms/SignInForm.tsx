@@ -1,32 +1,47 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import useForm from '../../../utils/hooks/useForm'
-import axios from 'axios'
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import useForm from '../../../utils/hooks/useForm';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AuthContext from '../../../context/AuthContext/AuthContext';
 
 export const SignInForm = () => {
 
-  const [form, handlerForm] = useForm()
+  const navigate = useNavigate()
 
-  async function sendForm(e: any) {
+  const authContext: any= React.useContext(AuthContext);
+
+  const notifyLoginFail = (message:string) => toast.error(message);
+
+  const [form, handlerForm] = useForm();
+
+  async function sendForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(form)
     try {
-      const response = await axios.post("http://localhost:3000/signin", form)
-      console.log(response)
+      const response = await axios.post("http://localhost:3000/signin", form);
+      loginSuccess(response);
     } catch (error) {
-      console.log(error)
+      loginError(error);
     }
   }
 
+  function loginSuccess(response: any) {
+    authContext.setToken(response.data.token)
+    authContext.setUser(response.data.user)
+    navigate("/")
+    alert("Login feito com sucesso");
+  }
 
-
-
+  function loginError(error: any) {
+    notifyLoginFail(error.response.data.message);
+  }
 
   return (
     <div>
-      <h1 className='text-5xl text-center py-1'>Login</h1>
+      <h1 className='text-5xl text-center py-1'>Login {authContext.token} </h1>
+      <h1>{authContext.user?.name}</h1>
       <form onSubmit={sendForm} className='grid grid-cols-2 gap-5 p-3'>
-
         <div className='h-12 bg-red-600 col-span-2'>
           <input onChange={handlerForm} placeholder='Email or Trainer Name' type="text" name="email" id="" className='w-full h-full border border-gray-400 py-1 px-2 w-full' />
         </div>
@@ -37,10 +52,10 @@ export const SignInForm = () => {
           Sign up for free
         </button>
       </form>
-
       <div className='text-center'>
         <Link to="/sign-up">Don't have an account yet, click here to create one.</Link>
       </div>
+      <ToastContainer /> {/* Adicionando o ToastContainer aqui */}
     </div>
-  )
-}
+  );
+};

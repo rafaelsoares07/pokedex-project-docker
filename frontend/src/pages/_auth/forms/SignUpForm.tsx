@@ -1,8 +1,18 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import useForm from '../../../utils/hooks/useForm'
 import axios from "axios"
+import { useContext } from 'react'
+import AuthContext from '../../../context/AuthContext/AuthContext'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const SignUpForm = () => {
+
+  const navigate = useNavigate()
+
+  const authContext:any= useContext(AuthContext)
+
+  const notifyLoginFail = (message:string) => toast.error(message);
 
   const [form, handlerForm] = useForm()
 
@@ -12,14 +22,22 @@ export const SignUpForm = () => {
     console.log(form)
     try {
       const response = await axios.post("http://localhost:3000/signup", form)
-      console.log(response)
+      loginSuccess(response)
     } catch (error) {
-      console.log(error)
+      loginError(error);
     }
   }
 
+  function loginSuccess(response: any) {
+    authContext.setToken(response.data.token)
+    authContext.setUser(response.data.user)
+    navigate("/")
+    alert("Login feito com sucesso");
+  }
 
-
+  function loginError(error: any) {
+    notifyLoginFail(error.response.data.message);
+  }
 
   return (
     <div>
