@@ -1,4 +1,4 @@
-import { getPokemons } from "../repositories/pokeapi.repository.js";
+import { getPokemons, getPokemonFamily } from "../repositories/pokeapi.repository.js";
 
 
 export const getPokemonService = async () => {
@@ -8,3 +8,9 @@ export const getPokemonService = async () => {
     
 }
 
+export const getPokemonFamilyService = async (url) => {
+ 
+    const pokemons= await getPokemonFamily(url)
+    return pokemons
+    
+}

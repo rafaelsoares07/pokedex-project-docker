@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getPokemonsController } from "../controllers/pokeapi.controller.js";
+import { getPokemonsController, getPokemonsFamilyController } from "../controllers/pokeapi.controller.js";
 
 const pokeapiRoutes = Router()
 
 pokeapiRoutes.get("/pokeapi", getPokemonsController)
+pokeapiRoutes.get("/pokeapi/getFamily", getPokemonsFamilyController)
 
 export default pokeapiRoutes

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 export default function TagAbility(props) {
     const [abilityDetails, setAbilityDetails] = React.useState({})
 
-    console.log(abilityDetails)
+    // console.log(abilityDetails)
     // console.log(abilityDetails.effect_entries)
 
 

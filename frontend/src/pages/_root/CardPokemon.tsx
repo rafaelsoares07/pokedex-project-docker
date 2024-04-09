@@ -10,12 +10,13 @@ export default function CardPokemon(props) {
     function openModalDetailPokemon(){
         props.setOpen(prev => !prev)
         props.setPokemonDetail(props.pokemon)
-    }
     
+    }
+    // console.log(props.pokemon)
     return (
         <div className='flex flex-col items-center'>
         
-            <p className='self-start text-3xl ml-5 mt-3'>#00{props.pokemon.order}</p>
+            <p className='self-start opacity-50 text-2xl ml-5 mt-3'>#00{props.pokemon.id}</p>
             
             <img
             className='hover:scale-110 cursor-pointer'
