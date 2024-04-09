@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const getPokemons = async () => {
 
-    const pokemons = await axios.get("https://pokeapi.co/api/v2/pokemon/?offset=100&limit=50")
+    const pokemons = await axios.get("https://pokeapi.co/api/v2/pokemon/?offset=0&limit=250")
 
     const pokemonList = pokemons.data.results.map(pokemon => axios.get(pokemon.url))
 
@@ -23,27 +23,27 @@ export const getPokemons = async () => {
 export const getPokemonFamily = async (url) => {
     let arrayPokemons = []
 
-
-
     const responseSpecieDetails = await axios.get(url)
     const responseEvolutionsDetails = await axios(responseSpecieDetails.data.evolution_chain)
+    let haveMoreOne = false
 
     let currentPokemon = responseEvolutionsDetails.data.chain
 
-    while (currentPokemon && currentPokemon.evolves_to) {
+    if(currentPokemon.evolves_to.length!=0){
+        haveMoreOne=true
+    }
+
+    while (currentPokemon.evolves_to.length!=0) {
 
         const response = await axios.get(currentPokemon.species.url);
         arrayPokemons.push(response.data);
         currentPokemon = currentPokemon.evolves_to[0];
-        console.log(currentPokemon.evolves_to[0])
+    }
 
-        if (!currentPokemon.evolves_to[0]) {
-            const response = await axios.get(currentPokemon.species.url);
-            arrayPokemons.push(response.data);
-            break;
-        }
+    if(haveMoreOne){
+        const response = await axios.get(currentPokemon.species.url);
+        arrayPokemons.push(response.data);
     }
 
     return arrayPokemons;
 }
-

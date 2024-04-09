@@ -2,10 +2,11 @@ import React from 'react'
 import ImageClose from '../../assets/cruz.png'
 import TagAbility from './TagAbility'
 import axios from 'axios'
+import StrendWorg from './StrendWorg'
 export default function ModalDetailsPokemon(props) {
 
   const [activeAbilitySelect, setActiveAbilitySelect] = React.useState([])
-  const [pokemonsFamily, setPokemonsFamily] = React.useState([])
+  const [pokemonsFamily, setPokemonsFamily] = React.useState(null)
 
   // console.log(pokemonsFamily)
 
@@ -37,9 +38,8 @@ export default function ModalDetailsPokemon(props) {
         const params = {
           url: props.pokemon.species.url
         }
-        const response = await axios.get(`http://192.168.0.14:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
+        const response = await axios.get(`http://10.1.11.124:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
         setPokemonsFamily(response.data)
-        console.log(response)
       } catch (error) {
         alert(error)
       }
@@ -74,7 +74,10 @@ export default function ModalDetailsPokemon(props) {
 
         <div className='flex items-center'>
 
-          <img className='cursor-pointer row-span-2 w-36 mr-5' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
+          <div>
+          <img className='cursor-pointer row-span-2 w-36 mr-5 filter brightness-0 invert grayscale hover:brightness-100 hover:invert-0 hover:grayscale-0' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
+          </div>
+          
           <div>
             <p className='text-white text-xl my-2'>Heigth: <span>{props.pokemon.height < 10 ? `0.${props.pokemon.height}` : props.pokemon.height} meters</span></p>
             <p className='text-white text-xl my-2'>Weigth: <span>{props.pokemon.weight} kilograms</span></p>
@@ -119,83 +122,25 @@ export default function ModalDetailsPokemon(props) {
 
         <h1 className='text-white text-3xl mt-3'>Family</h1>
         <div className='flex max-w-full flex-wrap'>
-          {pokemonsFamily && pokemonsFamily.length > 0 && (
-            pokemonsFamily.map((item, index) => {
-              return (
-                <img className='w-32' src={
-                  `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.id}.png`
-                } />
-              )
-            })
+          {pokemonsFamily ? (
+            pokemonsFamily.length > 0 ? (
+              pokemonsFamily.map((item, index) => (
+                <img key={index} className='w-32' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.id}.png`} />
+              ))
+            ) : (
+              <p className='text-black text-2xl opacity-65'>This Pokémon has no evolutions</p>
+            )
+          ) : (
+            <p className='text-black text-2xl opacity-65'>Carregando...</p>
           )}
         </div>
 
-
-
-
+        <StrendWorg pokemon={props.pokemon}/>
 
         <img src={ImageClose} onClick={() => closeModal()} className='absolute right-3 top-3 rounded-full cursor-pointer' />
       </div>
 
-      {/* <div className='grid grid-rows-3 grid-cols-3 gap-5'>
-
-        <img className='cursor-pointer row-span-2' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
-
-        <div className='row-span-2 col-span-2 flex flex-col items-center '>
-          <p className='text-2xl md:text-7xl text-white'>{props.pokemon.name}</p>
-          <div className='self-start'>
-            <p className='text-white text-xl my-2'>Heigth: <span>{props.pokemon.height < 10 ? `0.${props.pokemon.height}` : props.pokemon.height} meters</span></p>
-            <p className='text-white text-xl my-2'>Weigth: <span>{props.pokemon.weight} kilograms</span></p>
-          </div>
-          <div className='w-full'>
-            {props.pokemon.stats.map((item, index) => {
-              // { console.log(item) }
-              return (
-                <div className='flex justify-start items-center'>
-                  <div className='w-3/4 mr-5 relative'>
-                    <p className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-lg font-semibold'>{item.base_stat}</p>
-                    <progress className="w-full h-8 mr-5 rounded-full" value={item.base_stat} max={100}></progress>
-                  </div>
-                  <p className='text-white uppercase font-bold'>{item.stat.name}</p>
-                </div>
-              )
-            })}
-          </div>
-
-        </div>
-
-        <div className='col-span-3 flex'>
-          <div className='basis-2/5'>
-            <h1 className='text-white text-3xl'>Abilities</h1>
-            <div className='flex flex-wrap'>
-              {props.pokemon.abilities.map((item, index) => {
-                return (
-                  <TagAbility abilities={item} setActiveAbilitySelect={setActiveAbilitySelect} />
-                )
-              })}
-            </div>
-
-            <div>
-              {activeAbilitySelect.map((item, index)=>{
-                return(
-                  <div className='border my-2 p-3'>
-                    <p className='text-white'>{item.short_effect}</p>
-                  </div>
-                )
-              })}
-            </div>
-
-          </div>
-
-          <div className='basis-3/4'>
-            <h1 className='text-white text-3xl'>Family</h1>
-          </div>
-          
-        </div>
-
-        <img src={ImageClose} onClick={() => props.setOpen(prev => !prev)} className='absolute right-3 top-3 rounded-full cursor-pointer' />
-      </div> */}
-
+    
     </div>
   )
 }

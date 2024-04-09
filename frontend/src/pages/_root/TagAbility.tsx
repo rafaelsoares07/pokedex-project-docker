@@ -4,14 +4,10 @@ import React, { useEffect } from 'react'
 export default function TagAbility(props) {
     const [abilityDetails, setAbilityDetails] = React.useState({})
 
-    // console.log(abilityDetails)
-    // console.log(abilityDetails.effect_entries)
-
-
     React.useEffect(() => {
         async function fetchData() {
             const response = await axios.get(props.abilities.ability.url)
-            // console.log(response.data)
+          
             setAbilityDetails(response.data)
         }
         fetchData()

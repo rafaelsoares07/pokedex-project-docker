@@ -19,7 +19,7 @@ export const SignUpForm = () => {
   async function sendForm(e: any) {
     
     e.preventDefault();
-    // console.log(form)
+
     try {
       const response = await axios.post("http://localhost:3000/signup", form)
       loginSuccess(response)
