@@ -1,43 +1,48 @@
 import axios from 'axios'
-import React from 'react'
+import React, { ContextType } from 'react'
 import CardPokemon from './CardPokemon'
 import ModalDetailsPokemon from './ModalDetailsPokemon'
+import HomeContext from '../../context/HomeContext/HomeContext'
 
 export default function MainContent() {
 
-    const [open,setOpen] = React.useState(false)
+    const homeContext = React.useContext(HomeContext)
+
+    const [open, setOpen] = React.useState(false)
     const [pokemonDetail, setPokemonDetail] = React.useState({})
-    const [pokemons, setPokemons] = React.useState([])
     const [nextPage, setNextPage] = React.useState(null)
     const [visibility, setVisibility] = React.useState(true)
+   
 
-    // console.log(visibility)
 
     React.useEffect(() => {
-        async function fetchData(){
+        async function fetchData() {
             try {
                 const response = await axios.get("http://10.1.11.124:3000/pokeapi")
-    
-                setPokemons(response.data.pokemonsDetails)
+                homeContext.setPokemons(response.data.pokemonsDetails)
                 setNextPage(response.data.next)
             } catch (error) {
                 alert(error)
             }
         }
-    
+
         fetchData()
     }, [])
 
     return (
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 p-5 teste relative '>
-            <div className='absolute w-36 h-36' onClick={()=> setVisibility(!visibility)}>
-                <p className='bg-bug'>Teste</p>
-                <p className='bg-bug'>Teste</p>
-                <p className='bg-bug'>Teste</p>
-                <p className='bg-bug'>Teste</p>
-            </div>
-            {open && <ModalDetailsPokemon pokemon={pokemonDetail} open={open} setOpen={setOpen}/>}
-            {pokemons.map((item, index) => <CardPokemon visibility={visibility} setPokemonDetail={setPokemonDetail} open={open} setOpen={setOpen} key={index} pokemon={item}/>)}
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 p-5 teste'>
+            {open && <ModalDetailsPokemon pokemon={pokemonDetail} open={open} setOpen={setOpen} />}
+            {
+            homeContext.filterActive ?
+            homeContext.filterPokemons.map((item, index) => <CardPokemon visibility={visibility} setPokemonDetail={setPokemonDetail} open={open} setOpen={setOpen} key={index} pokemon={item} />)
+            :
+            homeContext.pokemons.map((item, index) => <CardPokemon visibility={visibility} setPokemonDetail={setPokemonDetail} open={open} setOpen={setOpen} key={index} pokemon={item} />)
+            }
+            {}
         </div>
     )
 }
+
+
+    
+
