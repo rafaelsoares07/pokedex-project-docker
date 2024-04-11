@@ -170,6 +170,7 @@ export const pokemonTypes = {
 
 export default function StrendWorg(props) {
 
+    console.log(props)
     const [type, setType] = React.useState(pokemonTypes[props.pokemon.types[0].type.name])
 
     const [lastClicked, setLastClicked] = React.useState(0);
@@ -181,8 +182,11 @@ export default function StrendWorg(props) {
 
     const formatUrlType = (url) =>{
         const texto = url.split("/")[url.split("/").length - 1]
+        console.log(texto.split(".")[0])
         return texto.split(".")[0]
     }
+
+    console.log(type)
 
     return (
         <div>

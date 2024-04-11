@@ -13,8 +13,13 @@ export default function Home() {
   const arrayTypes =['bug','dark','dragon','electric','fairy','fighting','fire','flying','ghost','normal','grass','ground','ice','poison','psychic','rock','steel','water']
 
   const [filterPokemons, setFilterPokemons] = React.useState([])
-  const [filterActive, setFilterActivite] = React.useState(false)
+  const [filterActive, setFilterActivite] = React.useState({
+    type:false,
+    weigth:false
+  })
   const [pokemons, setPokemons] = React.useState([])
+
+  console.log(filterActive)
 
   return (
     <HomeContext.Provider value={{pokemons, setPokemons, filterPokemons, setFilterPokemons, filterActive, setFilterActivite}}>
