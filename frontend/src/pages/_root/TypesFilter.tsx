@@ -30,34 +30,62 @@ export default function TypesFilter(props) {
     const [activeTypes, setActiveTypes] = React.useState([]);
     const arrayTypes = [bug, dark, dragon, electric, fairy, fighting, fire, flying, ghost, normal, grass, ground, ice, poison, psychic, rock, steel, water];
 
+    const arrayWeigth = [{name:"Leve",min:0 , max: 100}, {name:"Medio", min:100,max:500},{name:"Pesado",min:500, max:100000}]
+
+    const arrayHeigth = [{name:"Baixo",min:0 , max: 10}, {name:"Medio", min:10,max:50},{name:"Alto",min:400, max:10000}]
+
     const[weigth, setWeigth] =  React.useState(0)
     
+    const[heigth, setHeigth] =  React.useState(0)
+    
+    console.log(weigth)
+    console.log(heigth)
 
     useEffect(() => {
 
         let arrayFilter = [...homeContext.pokemons]
 
+        console.log(arrayFilter)
+
         if (selectedTypes.length > 0) {
             arrayFilter = arrayFilter.filter((pokemon) => {
                 return pokemon.types.some((typePokemon) => {
-                    console.log(typePokemon)
+                    // console.log(typePokemon)
                     return selectedTypes.includes(typePokemon.type.name);
                 });
             });
-            console.log(arrayFilter)
-            homeContext.setFilterActivite({...homeContext.filterActive, type:true});
+            // console.log("executou")
+            homeContext.setFilterActivite(prevState => ({...prevState, type:true}));
         }
+        else{
+            // console.log("cahmou aqui tbm")
+            homeContext.setFilterActivite(prevState => ({...prevState, type:false}));
+        }
+
         if(weigth!=0){
             arrayFilter = arrayFilter.filter((pokemon) => {
-                return pokemon.weight >= weigth
+                return pokemon.weight >= weigth.min && pokemon.weight <= weigth.max
             });
-            console.log(arrayFilter)
-            homeContext.setFilterActivite({...homeContext.filterActive, weigth:true});
+            // console.log(arrayFilter)
+            homeContext.setFilterActivite(prevState => ({...prevState, weigth:true}));
+        }
+        else{
+            homeContext.setFilterActivite(prevState => ({...prevState, weigth:false}));
+        }
+
+        if(heigth!=0){
+            arrayFilter = arrayFilter.filter((pokemon)=>{
+                return pokemon.height >= height.min && pokemon.height <= height.max
+            })
+            homeContext.setFilterActivite(prevState => ({...prevState, heigth:true}));
+        }
+        else{
+            homeContext.setFilterActivite(prevState => ({...prevState, heigth:false}));
         }
         
         homeContext.setFilterPokemons(arrayFilter);
 
-    }, [selectedTypes, weigth]);
+    }, [selectedTypes, weigth, homeContext.pokemons]);
 
     const handleTypeClick = (type) => {
         if (activeTypes.includes(type)) {
@@ -75,6 +103,10 @@ export default function TypesFilter(props) {
     const handleClearFilters = () => {
         setSelectedTypes([]);
         setActiveTypes([]);
+        setWeigth(0)
+
+        homeContext.setFilterActivite({...homeContext.filterActive, type:false});
+        homeContext.setFilterActivite({...homeContext.filterActive, weigth:false});    
     };
 
     // console.log(activeTypes)
@@ -99,6 +131,23 @@ export default function TypesFilter(props) {
                     );
                 })}
             </div>
+
+            <div className=' flex justify-start '>
+                {arrayWeigth.map((item, index)=>{
+                    return(
+                        <div className='p-5 border' onClick={()=>setWeigth(item)}>{item.name}</div>
+                    )
+                })}
+            </div>
+
+            <div className=' flex justify-start '>
+                {arrayHeigth.map((item, index)=>{
+                    return(
+                        <div className='p-5 border' onClick={()=>setHeigth(item)}>{item.name}</div>
+                    )
+                })}
+            </div>
+
             <input onChange={(event)=> setWeigth(event?.target.value)} value={weigth} type="number" name="" id="" />
             <button onClick={handleClearFilters}>Limpar Filtros</button>
         </div>

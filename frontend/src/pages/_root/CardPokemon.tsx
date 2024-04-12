@@ -5,7 +5,7 @@ import ModalDetailsPokemon from './ModalDetailsPokemon';
 
 export default function CardPokemon(props) {
 
-    // console.log(props.visibility)
+ 
     const [statusVisible, setStatusVisible] = React.useState(props.visibility)
 
     function openModalDetailPokemon() {
@@ -19,7 +19,7 @@ export default function CardPokemon(props) {
             :
             "filter brightness-0 grayscale hover:brightness-100 hover:invert-0 hover:grayscale-0"
     
-    // console.log(visibilityPokemons)
+ 
 
     return (
         <div className='flex flex-col items-center'>

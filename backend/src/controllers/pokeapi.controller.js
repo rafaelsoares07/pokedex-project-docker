@@ -1,9 +1,15 @@
 import { getPokemonFamilyService, getPokemonService } from "../services/pokeaip.services.js";
 
 export const getPokemonsController = async (req, res) => {
-    console.log('chegou')
+
+    let url = req.query["url"]
+
+    if(url == ""){
+        url = "https://pokeapi.co/api/v2/pokemon?limit=500&offset=0"
+    }
+
     try {
-        const pokemons = await getPokemonService()
+        const pokemons = await getPokemonService(url)
         res.status(201).send(pokemons)
 
     } catch (error) {
