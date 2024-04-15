@@ -18,11 +18,12 @@ export default function Home() {
   const [filterActive, setFilterActivite] = React.useState({
     type: false,
     weigth: false,
-    heigth:false
+    heigth:false,
+    interval:false, 
+    geration:false
   })
   const [pokemons, setPokemons] = React.useState([])
 
-  // console.log(filterActive)
 
   return (
     <HomeContext.Provider value={{ pokemons, setPokemons, filterPokemons, setFilterPokemons, filterActive, setFilterActivite }}>

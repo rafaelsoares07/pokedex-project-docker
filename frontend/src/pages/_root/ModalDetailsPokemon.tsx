@@ -8,7 +8,7 @@ export default function ModalDetailsPokemon(props) {
   const [activeAbilitySelect, setActiveAbilitySelect] = React.useState([])
   const [pokemonsFamily, setPokemonsFamily] = React.useState(null)
 
-  // console.log(pokemonsFamily)
+
 
   const colorClasses = {
     'bug': '#A7B723',
@@ -38,7 +38,7 @@ export default function ModalDetailsPokemon(props) {
         const params = {
           url: props.pokemon.species.url
         }
-        const response = await axios.get(`http://10.1.11.124:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
+        const response = await axios.get(`http://192.168.0.14:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
         setPokemonsFamily(response.data)
       } catch (error) {
         alert(error)
@@ -87,7 +87,7 @@ export default function ModalDetailsPokemon(props) {
         </div>
 
         {props.pokemon.stats.map((item, index) => {
-          // { console.log(item) }
+       
           return (
             <div className='flex justify-start items-center'>
               <div className='w-full mr-5 relative'>

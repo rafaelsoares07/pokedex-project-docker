@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import CardPokemon from './CardPokemon'
 import ModalDetailsPokemon from './ModalDetailsPokemon'
 import HomeContext from '../../context/HomeContext/HomeContext'
+import pako from 'pako'
+
 
 export default function MainContent() {
 
@@ -10,42 +12,49 @@ export default function MainContent() {
 
     const [open, setOpen] = React.useState(false)
     const [pokemonDetail, setPokemonDetail] = React.useState({})
-    const [nextPage, setNextPage] = React.useState("http://10.1.11.124:3000/pokeapi?url=")
+    const [nextPage, setNextPage] = React.useState("http://192.168.0.14:3000/pokeapi?url=")
     const [visibility, setVisibility] = React.useState(true)
     const [page, setPage] = React.useState(0)
-
+    const [loadding, setLoading] = React.useState(true)
 
     const shouldFilter = Object.values(homeContext.filterActive).some(Boolean);
 
-    // console.log(shouldFilter)
-    // console.log(nextPage)
-    // console.log(page)
 
-    function scrollToPageTop(){
-        window.scrollTo(0,0)
+    function scrollToPageTop() {
+        window.scrollTo(0, 0)
     }
 
     React.useEffect(() => {
         async function fetchData() {
-            // console.log("entrou no fetch")
-            try {
-                const response = await axios.get(nextPage)
-                // console.log(response)
-                homeContext.setPokemons([...homeContext.pokemons, ...response.data.pokemonsDetails])
-                setNextPage(`http://10.1.11.124:3000/pokeapi?url=${response.data.next}`)
-            } catch (error) {
-                alert(error)
-            }
-        }
+            if (localStorage.getItem("pokemons")) {
+                console.log("caiu no if")
+                const pokes = JSON.parse(localStorage.getItem("pokemons"))
+                homeContext.setPokemons(pokes)
+                console.log(pokes)
+            } else {
+                try {
+                    const response = await axios.get(nextPage)
+                    console.log(response.data)
 
+                    homeContext.setPokemons([...homeContext.pokemons, ...response.data])
+
+                    localStorage.setItem("pokemons", JSON.stringify(response.data))
+                } catch (error) {
+                    alert(error)
+                }
+            }
+
+        }
         fetchData()
     }, [page])
 
-    // console.log(homeContext.pokemons)
-    // console.log(shouldFilter)
+
 
     return (
-        <div>
+        <div className=''>
+            <div onClick={()=>scrollToPageTop()} className='bg-bug fixed bottom-10 right-3 h-10 w-10  border rounded-full flex justify-center items-center'>
+                
+            </div>
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 p-5 teste'>
                 {open && <ModalDetailsPokemon pokemon={pokemonDetail} open={open} setOpen={setOpen} />}
                 {
@@ -56,8 +65,6 @@ export default function MainContent() {
                 }
             </div>
 
-            {shouldFilter ? null:<button onClick={()=>setPage((prev)=>prev+1)}>Listar mais</button>}
-            <button onClick={()=>scrollToPageTop()}> TOPPPPP</button>
         </div>
 
     )

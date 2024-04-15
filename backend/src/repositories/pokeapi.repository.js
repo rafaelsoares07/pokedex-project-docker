@@ -1,24 +1,36 @@
 import axios from 'axios'
 
 export const getPokemons = async (url) => {
+    const pokemons = await axios.get(url);
 
-    const pokemons = await axios.get(url)
+    // Mapeia a lista de pokémons para uma lista de promessas para obter os detalhes de cada pokémon
+    const pokemonList = pokemons.data.results.map(pokemon => axios.get(pokemon.url));
 
-    const pokemonList = pokemons.data.results.map(pokemon => axios.get(pokemon.url))
+    const batchSize = 100; // Define o tamanho do lote
 
-    const pokemonsResponses = await Promise.all(pokemonList)
+    // Divide a lista de promessas em lotes menores
+    const batches = [];
+    for (let i = 0; i < pokemonList.length; i += batchSize) {
+        batches.push(pokemonList.slice(i, i + batchSize));
+    }
 
-    const pokemonsDetails = pokemonsResponses.map(response => response.data)
+    // Faz as solicitações em lotes
+    const pokemonsDetails = [];
+    for (const batch of batches) {
+        const batchResponses = await Promise.all(batch);
+        const batchDetails = batchResponses.map(response => response.data);
+        pokemonsDetails.push(...batchDetails);
+    }
 
-    console.log(pokemons.data.next)
-
+    // Constrói o objeto de retorno
     const pokemonReturn = {
         next: pokemons.data.next,
         pokemonsDetails
-    }
+    };
 
     return pokemonReturn;
 }
+
 
 export const getPokemonFamily = async (url) => {
     let arrayPokemons = []
