@@ -32,11 +32,19 @@ export default function TypesFilter(props) {
 
     const arrayTypes = [bug, dark, dragon, electric, fairy, fighting, fire, flying, ghost, normal, grass, ground, ice, poison, psychic, rock, steel, water];
 
-    const arrayWeigth = [{ name: "Leve", min: 0, max: 100 }, { name: "Medio", min: 100, max: 500 }, { name: "Pesado", min: 500, max: 100000 }]
+    const arrayWeigth = [
+        { name: "Leve", min: 0, max: 100, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/167.png' },
+        { name: "Medio", min: 100, max: 500, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png'},
+        { name: "Pesado", min: 500, max: 100000, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/67.png'}
+    ]
 
-    const arrayHeigth = [{ name: "Baixo", min: 0, max: 10 }, { name: "Medio", min: 11, max: 20 }, { name: "Alto", min: 21, max: 100 }]
+    const arrayHeigth = [
+        { name: "Baixo", min: 0, max: 10 ,image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/167.png'},
+        { name: "Medio", min: 11, max: 20 , image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png' }, 
+        { name: "Alto", min: 21, max: 100,image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/67.png'}
+    ]
 
-    const arrayGerations = [{name:"1 Geracao", start:1, end:151}, {name:"2 Geracao", start:152, end:251}, {name:"3 Geracao", start:252, end:386}]
+    const arrayGerations = [{ name: "1 Geracao", start: 1, end: 151 }, { name: "2 Geracao", start: 152, end: 251 }, { name: "3 Geracao", start: 252, end: 386 }]
 
     const [weigth, setWeigth] = React.useState(0)
 
@@ -44,91 +52,106 @@ export default function TypesFilter(props) {
 
     const [geration, setGerantion] = React.useState(0)
 
+    const [name, setName] = React.useState("")
+
     const [intervalLength, setIntervalLength] = React.useState({ start: 0, end: 0 })
 
+    console.log(name)
 
     useEffect(() => {
 
         let arrayFilter = [...homeContext.pokemons]
 
-        if (selectedTypes.length > 0) {
+        if (name != '') {
             arrayFilter = arrayFilter.filter((pokemon) => {
-                return pokemon.types.some((typePokemon) => {
+                console.log(pokemon.name.slice(0, name.length))
+                return pokemon.name.slice(0, name.length) == name.toLowerCase()
+            });
 
-                    return selectedTypes.includes(typePokemon.type.name);
+            homeContext.setFilterActivite(prevState => ({ ...prevState, name: true }));
+        } else {
+
+            homeContext.setFilterActivite(prevState => ({ ...prevState, name: false }));
+
+            if (selectedTypes.length > 0) {
+                arrayFilter = arrayFilter.filter((pokemon) => {
+                    return pokemon.types.some((typePokemon) => {
+
+                        return selectedTypes.includes(typePokemon.type.name);
+                    });
                 });
-            });
 
-            homeContext.setFilterActivite(prevState => ({ ...prevState, type: true }));
-        }
-        else {
+                homeContext.setFilterActivite(prevState => ({ ...prevState, type: true }));
+            }
+            else {
 
-            homeContext.setFilterActivite(prevState => ({ ...prevState, type: false }));
-        }
+                homeContext.setFilterActivite(prevState => ({ ...prevState, type: false }));
+            }
 
-        if (weigth != 0) {
-            arrayFilter = arrayFilter.filter((pokemon) => {
-                return pokemon.weight >= weigth.min && pokemon.weight <= weigth.max
-            });
+            if (weigth != 0) {
+                arrayFilter = arrayFilter.filter((pokemon) => {
+                    return pokemon.weight >= weigth.min && pokemon.weight <= weigth.max
+                });
 
-            homeContext.setFilterActivite(prevState => ({ ...prevState, weigth: true }));
-        }
-        else {
-            homeContext.setFilterActivite(prevState => ({ ...prevState, weigth: false }));
-        }
+                homeContext.setFilterActivite(prevState => ({ ...prevState, weigth: true }));
+            }
+            else {
+                homeContext.setFilterActivite(prevState => ({ ...prevState, weigth: false }));
+            }
 
-        if (heigth != 0) {
-            arrayFilter = arrayFilter.filter((pokemon) => {
+            if (heigth != 0) {
+                arrayFilter = arrayFilter.filter((pokemon) => {
 
-                return pokemon.height >= heigth.min && pokemon.height <= heigth.max
-            })
-            homeContext.setFilterActivite(prevState => ({ ...prevState, heigth: true }));
-        }
-        else {
-            homeContext.setFilterActivite(prevState => ({ ...prevState, heigth: false }));
-        }
+                    return pokemon.height >= heigth.min && pokemon.height <= heigth.max
+                })
+                homeContext.setFilterActivite(prevState => ({ ...prevState, heigth: true }));
+            }
+            else {
+                homeContext.setFilterActivite(prevState => ({ ...prevState, heigth: false }));
+            }
 
-        if (geration != 0) {
-            arrayFilter = arrayFilter.filter((pokemon) => {
+            if (geration != 0) {
+                arrayFilter = arrayFilter.filter((pokemon) => {
 
-                return pokemon.id >= geration.start && pokemon.id <= geration.end
-            })
-            homeContext.setFilterActivite(prevState => ({ ...prevState, geration: true }));
-        }
-        else {
-            homeContext.setFilterActivite(prevState => ({ ...prevState, geration: false }));
-        }
+                    return pokemon.id >= geration.start && pokemon.id <= geration.end
+                })
+                homeContext.setFilterActivite(prevState => ({ ...prevState, geration: true }));
+            }
+            else {
+                homeContext.setFilterActivite(prevState => ({ ...prevState, geration: false }));
+            }
 
-       
-        if ((intervalLength.start != 0 || intervalLength.end != 0) && (intervalLength.start < intervalLength.end )) {
-            console.log("ENTROU NO FILTRO")
-            arrayFilter = arrayFilter.filter((pokemon) => {
 
-                return pokemon.id >= intervalLength.start && pokemon.id <= intervalLength.end
-            })
-            homeContext.setFilterActivite(prevState => ({ ...prevState, interval: true }));
-        } 
-        else if (intervalLength.start!=0 && intervalLength.end==0) {
-            arrayFilter = arrayFilter.filter((pokemon) => {
+            if ((intervalLength.start != 0 || intervalLength.end != 0) && (intervalLength.start < intervalLength.end)) {
+                console.log("ENTROU NO FILTRO")
+                arrayFilter = arrayFilter.filter((pokemon) => {
 
-                return pokemon.id >= intervalLength.start
-            })
-            homeContext.setFilterActivite(prevState => ({ ...prevState, interval: true }));
-        }
-        else if (intervalLength.start==0 && intervalLength.end!=0) {
-            arrayFilter = arrayFilter.filter((pokemon) => {
+                    return pokemon.id >= intervalLength.start && pokemon.id <= intervalLength.end
+                })
+                homeContext.setFilterActivite(prevState => ({ ...prevState, interval: true }));
+            }
+            else if (intervalLength.start != 0 && intervalLength.end == 0) {
+                arrayFilter = arrayFilter.filter((pokemon) => {
 
-                return pokemon.id <= intervalLength.end
-            })
-            homeContext.setFilterActivite(prevState => ({ ...prevState, interval: true }));
-        }
-        else {
-            homeContext.setFilterActivite(prevState => ({ ...prevState, interval: false }));
+                    return pokemon.id >= intervalLength.start
+                })
+                homeContext.setFilterActivite(prevState => ({ ...prevState, interval: true }));
+            }
+            else if (intervalLength.start == 0 && intervalLength.end != 0) {
+                arrayFilter = arrayFilter.filter((pokemon) => {
+
+                    return pokemon.id <= intervalLength.end
+                })
+                homeContext.setFilterActivite(prevState => ({ ...prevState, interval: true }));
+            }
+            else {
+                homeContext.setFilterActivite(prevState => ({ ...prevState, interval: false }));
+            }
         }
 
         homeContext.setFilterPokemons(arrayFilter);
 
-    }, [selectedTypes, weigth, heigth,intervalLength,geration, homeContext.pokemons]);
+    }, [name, selectedTypes, weigth, heigth, intervalLength, geration, homeContext.pokemons]);
 
     const handleTypeClick = (type) => {
         if (activeTypes.includes(type)) {
@@ -148,7 +171,7 @@ export default function TypesFilter(props) {
         setActiveTypes([]);
         setWeigth(0)
         setHeigth(0)
-        setIntervalLength({start:0, end:0})
+        setIntervalLength({ start: 0, end: 0 })
         setGerantion(0)
 
         homeContext.setFilterActivite({ ...homeContext.filterActive, type: false });
@@ -156,10 +179,10 @@ export default function TypesFilter(props) {
         homeContext.setFilterActivite({ ...homeContext.filterActive, weigth: false });
         homeContext.setFilterActivite({ ...homeContext.filterActive, interval: false });
         homeContext.setFilterActivite({ ...homeContext.filterActive, geration: false });
-       
+
     };
 
-
+    console.log(homeContext.filterPokemons)
 
     const formatUrlType = (url) => {
         const texto = url.split("/")[url.split("/").length - 1];
@@ -167,7 +190,10 @@ export default function TypesFilter(props) {
     };
 
     return (
-        <div>
+        <div className=' flex flex-col items-center gap-2'>
+            <div className='flex items-center justify-center w-full sm:w-2/4 md:w-2/5'>
+                <input placeholder="Seach for name's pokemon" type="text" value={name} onChange={(event)=> setName(event.target.value)} className='h-10 w-4/5 ' />
+            </div>
             <div className='flex flex-wrap gap-1 justify-center'>
                 {arrayTypes.map((item, index) => {
                     return (
@@ -181,18 +207,24 @@ export default function TypesFilter(props) {
                 })}
             </div>
 
-            <div className=' flex justify-start '>
+            <div className=' flex gap-5'>
                 {arrayWeigth.map((item, index) => {
                     return (
-                        <div className={`p-5 border ${weigth.name == item.name?'bg-blue-500':null}`} onClick={() => setWeigth(item)}>{item.name}</div>
+                        <div className={`p-5  text-black bg-gray-100 ${weigth.name == item.name ? 'bg-red-500' : null}`} onClick={() => setWeigth(item)}>
+                            <img className={`w-14 filter brightness-0 grayscale ${weigth.name == item.name ? 'brightness-0 invert-0 grayscale-0' : null}`} src={item.image} />
+                            <span className='text-xl text-bvlack  text-center'>{item.name}</span>
+                        </div>
                     )
                 })}
             </div>
 
-            <div className=' flex justify-start '>
+            <div className=' flex gap-5 '>
                 {arrayHeigth.map((item, index) => {
                     return (
-                        <div className={`p-5 border ${heigth.name == item.name?'bg-blue-500':null}`} onClick={() => setHeigth(item)}>{item.name}</div>
+                        <div className={`p-5  text-black bg-gray-100 ${heigth.name == item.name ? 'bg-red-500' : null}`} onClick={() => setHeigth(item)}>
+                            <img className={`w-14 filter brightness-0 grayscale ${heigth.name == item.name ? 'brightness-0 invert-0 grayscale-0' : null}`} src={item.image} />
+                            <span className='text-xl text-bvlack  text-center'>{item.name}</span>
+                        </div>
                     )
                 })}
             </div>
@@ -200,7 +232,7 @@ export default function TypesFilter(props) {
             <div className=' flex justify-start '>
                 {arrayGerations.map((item, index) => {
                     return (
-                        <div className={`p-5 border ${geration.name == item.name?'bg-blue-500':null}`} onClick={() => setGerantion(item)}>{item.name}</div>
+                        <div className={`p-5 border ${geration.name == item.name ? 'bg-blue-500' : null}`} onClick={() => setGerantion(item)}>{item.name}</div>
                     )
                 })}
             </div>
@@ -213,6 +245,7 @@ export default function TypesFilter(props) {
                     className="w-20 h-10"
                     type="number"
                     name="start"
+                    placeholder='ID Min'
                 />
                 <input
                     onChange={(event) => {
@@ -221,9 +254,10 @@ export default function TypesFilter(props) {
                     className="w-20 h-10"
                     type="number"
                     name="end"
+                    placeholder='ID Max'
                 />
             </div>
-
+            <span>{homeContext.filterPokemons.length>0 && homeContext.filterPokemons? `Foram filtrados um total de ${homeContext.filterPokemons.length} pokemons`:"Não foram encontrados nenhum pokemon com os filtros selecionados"}</span>
 
             <button onClick={handleClearFilters}>Limpar Filtros</button>
         </div>

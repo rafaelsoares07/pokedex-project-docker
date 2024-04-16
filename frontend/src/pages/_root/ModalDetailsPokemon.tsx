@@ -38,7 +38,7 @@ export default function ModalDetailsPokemon(props) {
         const params = {
           url: props.pokemon.species.url
         }
-        const response = await axios.get(`http://192.168.0.14:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
+        const response = await axios.get(`http://10.1.11.124:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
         setPokemonsFamily(response.data)
       } catch (error) {
         alert(error)
@@ -74,8 +74,8 @@ export default function ModalDetailsPokemon(props) {
 
         <div className='flex items-center'>
 
-          <div>
-          <img className='cursor-pointer row-span-2 w-36 mr-5 filter brightness-0 invert grayscale hover:brightness-100 hover:invert-0 hover:grayscale-0' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
+          <div className='bg-white'>
+          <img className='cursor-pointer row-span-2 w-36 mr-5 filter brightness-100 invert grayscale hover:brightness-100 hover:invert-0 hover:grayscale-0' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
           </div>
           
           <div>

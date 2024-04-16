@@ -12,7 +12,7 @@ export default function MainContent() {
 
     const [open, setOpen] = React.useState(false)
     const [pokemonDetail, setPokemonDetail] = React.useState({})
-    const [nextPage, setNextPage] = React.useState("http://192.168.0.14:3000/pokeapi?url=")
+    const [nextPage, setNextPage] = React.useState("http://10.1.11.124:3000/pokeapi?url=")
     const [visibility, setVisibility] = React.useState(true)
     const [page, setPage] = React.useState(0)
     const [loadding, setLoading] = React.useState(true)
@@ -31,6 +31,7 @@ export default function MainContent() {
                 const pokes = JSON.parse(localStorage.getItem("pokemons"))
                 homeContext.setPokemons(pokes)
                 console.log(pokes)
+                setLoading(false)
             } else {
                 try {
                     const response = await axios.get(nextPage)
@@ -39,6 +40,7 @@ export default function MainContent() {
                     homeContext.setPokemons([...homeContext.pokemons, ...response.data])
 
                     localStorage.setItem("pokemons", JSON.stringify(response.data))
+                    setLoading(false)
                 } catch (error) {
                     alert(error)
                 }
@@ -52,17 +54,19 @@ export default function MainContent() {
 
     return (
         <div className=''>
-            <div onClick={()=>scrollToPageTop()} className='bg-bug fixed bottom-10 right-3 h-10 w-10  border rounded-full flex justify-center items-center'>
-                
+
+            <div onClick={() => scrollToPageTop()} className='bg-bug fixed bottom-10 right-3 h-10 w-10  border rounded-full flex justify-center items-center'>
+
             </div>
             <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 p-5 teste'>
                 {open && <ModalDetailsPokemon pokemon={pokemonDetail} open={open} setOpen={setOpen} />}
                 {
-                    shouldFilter ?
+                    loadding ? "Carregando..." : shouldFilter ?
                         homeContext.filterPokemons.map((item, index) => <CardPokemon visibility={visibility} setPokemonDetail={setPokemonDetail} open={open} setOpen={setOpen} key={index} pokemon={item} />)
                         :
                         homeContext.pokemons.map((item, index) => <CardPokemon visibility={visibility} setPokemonDetail={setPokemonDetail} open={open} setOpen={setOpen} key={index} pokemon={item} />)
                 }
+
             </div>
 
         </div>

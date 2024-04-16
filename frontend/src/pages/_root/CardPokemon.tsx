@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import HomeContext from '../../context/HomeContext/HomeContext';
 import ModalDetailsPokemon from './ModalDetailsPokemon';
-
+import Image from '../../assets/react.svg'
 
 export default function CardPokemon(props) {
 
@@ -28,8 +28,7 @@ export default function CardPokemon(props) {
             
 
             <img
-            // onMouseEnter={()=>setStatusVisible(true)}
-            // onMouseLeave={()=>setStatusVisible(false)}
+            onLoad={<Image/>}
                 className={`${visibilityPokemons} hover:scale-110 cursor-pointer`}
                 onClick={() => openModalDetailPokemon()}
                 src={
