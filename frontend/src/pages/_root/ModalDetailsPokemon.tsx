@@ -14,10 +14,10 @@ export default function ModalDetailsPokemon(props) {
     'bug': '#A7B723',
     'dark': "#75574C",
     'dragon': '#7037FF',
-    'eletric': '#F9CF30',
+    'electric': '#F9CF30',
     'fairy': '#E69EAC',
     'fighting': '#C12239',
-    'fire': '#F57D31',
+    'fire': '#F57D31', 
     'flying': '#A891EC',
     'ghost': '#70559B',
     'normal': '#AAA67F',
@@ -27,7 +27,7 @@ export default function ModalDetailsPokemon(props) {
     'poison': '#A43E9E',
     'psychic': '#FB5584',
     'rock': '#B69E31',
-    'steel': '#B7B9DO',
+    'steel': '#808080',
     'water': '#6493EB'
   };
 
@@ -38,7 +38,7 @@ export default function ModalDetailsPokemon(props) {
         const params = {
           url: props.pokemon.species.url
         }
-        const response = await axios.get(`http://10.1.11.124:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
+        const response = await axios.get(`http://localhost:3000/pokeapi/getFamily?url=${props.pokemon.species.url}`)
         setPokemonsFamily(response.data)
       } catch (error) {
         alert(error)
@@ -74,8 +74,8 @@ export default function ModalDetailsPokemon(props) {
 
         <div className='flex items-center'>
 
-          <div className='bg-white'>
-          <img className='cursor-pointer row-span-2 w-36 mr-5 filter brightness-100 invert grayscale hover:brightness-100 hover:invert-0 hover:grayscale-0' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
+          <div className=''>
+          <img className='cursor-pointer row-span-2 w-36 mr-5 filter' src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${props.pokemon.id}.png`} />
           </div>
           
           <div>

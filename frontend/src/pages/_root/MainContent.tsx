@@ -12,7 +12,7 @@ export default function MainContent() {
 
     const [open, setOpen] = React.useState(false)
     const [pokemonDetail, setPokemonDetail] = React.useState({})
-    const [nextPage, setNextPage] = React.useState("http://10.1.11.124:3000/pokeapi?url=")
+    const [nextPage, setNextPage] = React.useState("http://192.168.0.14:3000/pokeapi?url=")
     const [visibility, setVisibility] = React.useState(true)
     const [page, setPage] = React.useState(0)
     const [loadding, setLoading] = React.useState(true)
