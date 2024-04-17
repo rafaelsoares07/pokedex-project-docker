@@ -1,12 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import HomeContext from '../../context/HomeContext/HomeContext';
-import ModalDetailsPokemon from './ModalDetailsPokemon';
 import Image from '../../assets/react.svg'
 
 export default function CardPokemon(props) {
 
- 
-    const [statusVisible, setStatusVisible] = React.useState(props.visibility)
+    const homeContext = React.useContext(HomeContext) 
 
     function openModalDetailPokemon() {
         props.setOpen(prev => !prev)
@@ -14,7 +12,7 @@ export default function CardPokemon(props) {
     }
 
     let visibilityPokemons =
-        props.visibility ?
+    homeContext.visibility ?
             null
             :
             "filter brightness-0 grayscale hover:brightness-100 hover:invert-0 hover:grayscale-0"
