@@ -25,7 +25,7 @@ export default {
         'poison':'#A43E9E',
         'psychic':'#FB5584',
         'rock':'#B69E31',
-        'steel':'#B7B9DO',
+        'steel':'#808080',
         'water':'#6493EB'
       }
     }
