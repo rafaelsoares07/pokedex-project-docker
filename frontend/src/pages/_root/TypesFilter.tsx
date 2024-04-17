@@ -33,18 +33,18 @@ export default function TypesFilter(props) {
     const arrayTypes = [bug, dark, dragon, electric, fairy, fighting, fire, flying, ghost, normal, grass, ground, ice, poison, psychic, rock, steel, water];
 
     const arrayWeigth = [
-        { name: "Leve", min: 0, max: 100, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/167.png' },
-        { name: "Medio", min: 100, max: 500, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png'},
-        { name: "Pesado", min: 500, max: 100000, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/67.png'}
+        { name: "Light", min: 0, max: 100, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/167.png' },
+        { name: "Medium", min: 100, max: 500, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png'},
+        { name: "Heavy", min: 500, max: 100000, image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/67.png'}
     ]
 
     const arrayHeigth = [
-        { name: "Baixo", min: 0, max: 10 ,image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/167.png'},
-        { name: "Medio", min: 11, max: 20 , image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png' }, 
-        { name: "Alto", min: 21, max: 100,image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/67.png'}
+        { name: "Low", min: 0, max: 10 ,image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/167.png'},
+        { name: "Medium", min: 11, max: 20 , image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png' }, 
+        { name: "Tall", min: 21, max: 100,image:'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/67.png'}
     ]
 
-    const arrayGerations = [{ name: "1 Geracao", start: 1, end: 151 }, { name: "2 Geracao", start: 152, end: 251 }, { name: "3 Geracao", start: 252, end: 386 }]
+    const arrayGerations = [{ name: "1 Geração", start: 1, end: 151 }, { name: "2 Geração", start: 152, end: 251 }, { name: "3 Geração", start: 252, end: 386 }]
 
     const [weigth, setWeigth] = React.useState(0)
 
@@ -54,15 +54,15 @@ export default function TypesFilter(props) {
 
     const [name, setName] = React.useState("")
 
-    const [intervalLength, setIntervalLength] = React.useState({ start: 0, end: 0 })
+    const [intervalLength, setIntervalLength] = React.useState({ start: '', end: '' })
 
-    console.log(name)
 
     useEffect(() => {
 
         let arrayFilter = [...homeContext.pokemons]
 
         if (name != '') {
+            
             arrayFilter = arrayFilter.filter((pokemon) => {
                 console.log(pokemon.name.slice(0, name.length))
                 return pokemon.name.slice(0, name.length) == name.toLowerCase()
@@ -166,12 +166,29 @@ export default function TypesFilter(props) {
 
     };
 
+    const handleWeigthClick = (item) => {
+       if(weigth?.name != item.name){
+        setWeigth(item)
+       }else{
+        setWeigth(0)
+       }
+    };
+
+    const handleHeigthClick = (item) => {
+        if(heigth?.name != item.name){
+         setHeigth(item)
+        }else{
+         setHeigth(0)
+        }
+     };
+
+
     const handleClearFilters = () => {
         setSelectedTypes([]);
         setActiveTypes([]);
         setWeigth(0)
         setHeigth(0)
-        setIntervalLength({ start: 0, end: 0 })
+        setIntervalLength({ start: '', end: '' })
         setGerantion(0)
 
         homeContext.setFilterActivite({ ...homeContext.filterActive, type: false });
@@ -182,17 +199,17 @@ export default function TypesFilter(props) {
 
     };
 
-    console.log(homeContext.filterPokemons)
-
     const formatUrlType = (url) => {
         const texto = url.split("/")[url.split("/").length - 1];
         return texto.split(".")[0];
     };
 
+
+
     return (
-        <div className=' flex flex-col items-center gap-2'>
-            <div className='flex items-center justify-center w-full sm:w-2/4 md:w-2/5'>
-                <input placeholder="Seach for name's pokemon" type="text" value={name} onChange={(event)=> setName(event.target.value)} className='h-10 w-4/5 ' />
+        <div className=' flex flex-col items-center gap-2 '>
+            <div className='mt-5 w-full flex justify-center'>
+                <input className="rounded-2xl h-16 w-full" placeholder="Seacher for name's pokemon" type="text" value={name} onChange={(event)=> setName(event.target.value)} />
             </div>
             <div className='flex flex-wrap gap-1 justify-center'>
                 {arrayTypes.map((item, index) => {
@@ -210,9 +227,9 @@ export default function TypesFilter(props) {
             <div className=' flex gap-5'>
                 {arrayWeigth.map((item, index) => {
                     return (
-                        <div className={`p-5  text-black bg-gray-100 ${weigth.name == item.name ? 'bg-red-500' : null}`} onClick={() => setWeigth(item)}>
-                            <img className={`w-14 filter brightness-0 grayscale ${weigth.name == item.name ? 'brightness-0 invert-0 grayscale-0' : null}`} src={item.image} />
-                            <span className='text-xl text-bvlack  text-center'>{item.name}</span>
+                        <div className={`p-5 text-black`} onClick={() => handleWeigthClick(item)}>
+                            <img className={`w-14 filter brightness-0 grayscale ${weigth.name == item.name ? 'brightness-0 invert' : null}`} src={item.image} />
+                            <span className='text-xl text-white  text-center'>{item.name}</span>
                         </div>
                     )
                 })}
@@ -221,9 +238,9 @@ export default function TypesFilter(props) {
             <div className=' flex gap-5 '>
                 {arrayHeigth.map((item, index) => {
                     return (
-                        <div className={`p-5  text-black bg-gray-100 ${heigth.name == item.name ? 'bg-red-500' : null}`} onClick={() => setHeigth(item)}>
-                            <img className={`w-14 filter brightness-0 grayscale ${heigth.name == item.name ? 'brightness-0 invert-0 grayscale-0' : null}`} src={item.image} />
-                            <span className='text-xl text-bvlack  text-center'>{item.name}</span>
+                        <div className={`p-5 text-black`} onClick={() => handleHeigthClick(item)}>
+                            <img className={`w-14 filter brightness-0 grayscale ${heigth.name == item.name ? 'brightness-0 invert' : null}`} src={item.image} />
+                            <span className='text-xl text-white  text-center'>{item.name}</span>
                         </div>
                     )
                 })}
@@ -237,29 +254,31 @@ export default function TypesFilter(props) {
                 })}
             </div>
 
-            <div className='flex gap-5'>
+            <div className='flex gap-5 w-full justify-center'>
                 <input
                     onChange={(event) => {
                         setIntervalLength((prev) => ({ ...prev, start: Number(event.target.value) }))
                     }}
-                    className="w-20 h-10"
+                    className="w-2/6 h-14 p-2"
                     type="number"
                     name="start"
                     placeholder='ID Min'
+                    value={intervalLength.start}
                 />
                 <input
                     onChange={(event) => {
                         setIntervalLength((prev) => ({ ...prev, end: Number(event.target.value) }))
                     }}
-                    className="w-20 h-10"
+                    className="w-2/6 h-14 p-2"
                     type="number"
                     name="end"
                     placeholder='ID Max'
+                    value={intervalLength.end}
                 />
             </div>
-            <span>{homeContext.filterPokemons.length>0 && homeContext.filterPokemons? `Foram filtrados um total de ${homeContext.filterPokemons.length} pokemons`:"Não foram encontrados nenhum pokemon com os filtros selecionados"}</span>
+            <span className='text-white text-lg'>{homeContext.filterPokemons.length>0 && homeContext.filterPokemons? `Foram filtrados um total de ${homeContext.filterPokemons.length} Pokemons`:"Filtragem nao retornou nada"}</span>
 
-            <button onClick={handleClearFilters}>Limpar Filtros</button>
+            <button className='px-5 py-3 rounded-lg text-white' onClick={handleClearFilters}>Limpar Filtros</button>
         </div>
     );
 }
